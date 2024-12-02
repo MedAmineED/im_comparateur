@@ -1,0 +1,23 @@
+.heroNewMain{
+    height: 100%;
+}
+
+.semIHero {
+    height : 100%;
+}
+
+.thirdContaner {
+    height: 100%;
+}
+
+.imgContainer {
+    height: 100%
+}
+.scondImageCont {
+    height: 100%;
+    overflow: hidden;
+}
+
+.btnStyle{
+    background-color:#4caf50 !important;
+}

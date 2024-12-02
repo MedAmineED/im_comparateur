@@ -1,0 +1,15 @@
+.container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .card {
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .descriptions {
+    margin-top: 16px;
+  }
+  

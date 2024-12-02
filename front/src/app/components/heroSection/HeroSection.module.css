@@ -1,0 +1,17 @@
+/* src/components/HeroCarousel.module.css */
+.carousel {
+    position: relative; /* Ensure the carousel container is positioned */
+    height: 60vh; /* Adjust the height as needed */
+    overflow: hidden; /* Hide overflow for better appearance */
+  }
+  
+  .carouselItem {
+    position: relative; /* Positioning context for Image fill */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+  }
+  
+  .carousel img {
+    object-fit: cover; /* Ensure images cover the area without distortion */
+  }
+  

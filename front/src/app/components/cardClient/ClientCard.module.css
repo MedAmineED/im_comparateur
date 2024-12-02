@@ -1,0 +1,22 @@
+/* styles/ClientDetailsCard.css */
+.clientCard {
+    .ant-descriptions-item {
+      padding: 12px 0;
+    }
+    
+    .ant-descriptions-item-label {
+      font-weight: 600;
+      color: #1f2937;
+    }
+    
+    .ant-descriptions-item-content {
+      color: #4b5563;
+    }
+    
+    .ant-modal-content {
+      border-radius: 8px;
+    }
+  }
+  
+  /* Add this import to your global CSS file or component */
+  /* import './ClientDetailsCard.css'; */

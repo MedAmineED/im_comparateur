@@ -1,0 +1,192 @@
+/* Results.module.css */
+.container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 20px;
+    padding: 20px;
+    padding-top: 100px;
+    background: linear-gradient(135deg, #ffffff, #f8f9fa, #f1f8e9);
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .leftPanel {
+    height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-right: 20px;
+    position: sticky;
+    top: 100px;
+  }
+  
+  .titleSection {
+    text-align: left;
+    margin-bottom: 20px;
+    color: #133115;
+  }
+  
+  .titleSection h2 {
+    color: #133115 !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .contactButton {
+    margin-top: 1rem;
+    background: #4caf50 !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .contactButton:hover {
+    background: #45a049 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+  }
+  
+  .listContainer {
+    height: calc(100vh - 40px);
+    overflow-y: auto;
+    padding-right: 20px;
+    scroll-behavior: smooth;
+  }
+  
+  .adPanel {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(46, 125, 50, 0.15);
+  }
+  
+  .partnerLogos {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+  }
+  
+  .partnerLogo {
+    width: 100%;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+    background: white;
+    padding: 8px;
+  }
+  
+  .partnerLogo:hover {
+    transform: scale(1.05);
+  }
+  
+  .glassEffect {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 32px rgba(46, 125, 50, 0.15);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-bottom: 20px;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+  }
+  
+  .glassEffect:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(46, 125, 50, 0.2);
+  }
+  
+  .featureList {
+    padding-left: 20px;
+    list-style-type: disc;
+    color: #666;
+    margin-top: 10px;
+  }
+  
+  .featureList li {
+    margin-top: 5px;
+  }
+  
+  .price {
+    display: block;
+    margin-top: 8px;
+    font-size: 1.2em;
+    color: #2e7d32;
+    font-weight: bold;
+  }
+  
+  .insuranceImage {
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .insuranceImage:hover {
+    transform: scale(1.05);
+  }
+  
+  .logoAvatar {
+    background: white;
+    padding: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Custom scrollbar */
+  .listContainer::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .listContainer::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+  }
+  
+  .listContainer::-webkit-scrollbar-thumb {
+    background: rgba(76, 175, 80, 0.2);
+    border-radius: 4px;
+  }
+  
+  .listContainer::-webkit-scrollbar-thumb:hover {
+    background: rgba(76, 175, 80, 0.3);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .container {
+      grid-template-columns: 1fr;
+      height: auto;
+      overflow: visible;
+    }
+  
+    .leftPanel {
+      height: auto;
+      padding-right: 0;
+      position: static;
+    }
+  
+    .listContainer {
+      height: auto;
+      overflow: visible;
+      padding-right: 0;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      padding: 10px;
+      padding-top: 80px;
+    }
+  
+    .glassEffect {
+      padding: 15px;
+    }
+  
+    .insuranceImage {
+      width: 100%;
+      height: auto;
+    }
+  }

@@ -1,0 +1,30 @@
+body {
+    padding: 0 !important;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.containerCST{
+    padding: 0 8% !important;
+}
+
+.border-btn {
+    background-color: transparent;
+    border : 1px solid #FFE700;
+    color : black;
+    height: 40px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 20px;
+}
+.border-btn:hover {
+    color : white !important;
+    background-color: green !important;
+    transition: 0.3s ease;
+}
+
+@media (min-width : 1000px){
+    .containerCST {
+        padding: 0 20% !important
+    };
+}

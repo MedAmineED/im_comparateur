@@ -1,0 +1,345 @@
+/* components/Signup.module.css */
+
+.container {
+  background: linear-gradient(135deg, #ffffff, #f8f9fa, #f1f8e9);
+  color: #133115;
+  min-height: 959px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+}
+
+/* Enhanced decorative elements with more balls */
+.container::before,
+.container::after,
+.container .bubble,
+.container .ball-1,
+.container .ball-2,
+.container .ball-3,
+.container .ball-4,
+.container .ball-5 {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(232, 245, 233, 0.8), rgba(241, 248, 233, 0.8));
+  animation: moveCircle 20s infinite linear;
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  z-index: 1;
+}
+
+/* Original bubbles */
+.container::before {
+  width: 300px;
+  height: 300px;
+  top: -150px;
+  right: -150px;
+  animation: moveCircle 25s infinite ease-in-out;
+}
+
+.container::after {
+  width: 200px;
+  height: 200px;
+  bottom: -100px;
+  left: -100px;
+  animation: moveCircle 30s infinite ease-in-out reverse;
+}
+
+/* Additional floating balls with different sizes and positions */
+.container .ball-1 {
+  width: 80px;
+  height: 80px;
+  top: 15%;
+  right: 25%;
+  animation: float 12s ease-in-out infinite;
+  background: linear-gradient(135deg, rgba(200, 230, 201, 0.8), rgba(232, 245, 233, 0.8));
+}
+
+.container .ball-2 {
+  width: 120px;
+  height: 120px;
+  bottom: 20%;
+  right: 15%;
+  animation: float 15s ease-in-out infinite reverse;
+  background: linear-gradient(135deg, rgba(165, 214, 167, 0.8), rgba(200, 230, 201, 0.8));
+}
+
+.container .ball-3 {
+  width: 60px;
+  height: 60px;
+  top: 30%;
+  left: 20%;
+  animation: bounce 10s ease-in-out infinite;
+  background: linear-gradient(135deg, rgba(129, 199, 132, 0.8), rgba(165, 214, 167, 0.8));
+}
+
+.container .ball-4 {
+  width: 40px;
+  height: 40px;
+  bottom: 35%;
+  left: 30%;
+  animation: bounce 8s ease-in-out infinite reverse;
+  background: linear-gradient(135deg, rgba(102, 187, 106, 0.8), rgba(129, 199, 132, 0.8));
+}
+
+.container .ball-5 {
+  width: 90px;
+  height: 90px;
+  top: 45%;
+  right: 35%;
+  animation: spin 20s linear infinite;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.8), rgba(102, 187, 106, 0.8));
+}
+
+/* Additional animation keyframes */
+@keyframes bounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(180deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Enhanced float animation */
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0) rotate(0deg) translateX(0);
+    filter: brightness(1);
+  }
+  25% { 
+    transform: translateY(-15px) rotate(5deg) translateX(10px);
+    filter: brightness(1.1);
+  }
+  50% { 
+    transform: translateY(-30px) rotate(0deg) translateX(0);
+    filter: brightness(1.2);
+  }
+  75% { 
+    transform: translateY(-15px) rotate(-5deg) translateX(-10px);
+    filter: brightness(1.1);
+  }
+}
+
+.main {
+  padding: 70px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.logo {
+  width: auto;
+  height: 42px;
+  margin-bottom: 40px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.logo:hover {
+  transform: translateY(-2px) scale(1.05);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.card {
+  box-shadow: 0 8px 32px rgba(46, 125, 50, 0.15);
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.5),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: 0.5s;
+}
+
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(46, 125, 50, 0.2);
+}
+
+.card:hover::before {
+  transform: translateX(100%);
+}
+
+.submitButton {
+  width: 100%;
+  font-weight: bold;
+  background: linear-gradient(45deg, #2e7d32, #388e3c, #43a047);
+  background-size: 200% auto;
+  color: white;
+  border: none;
+  padding: 15px;
+  font-size: 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(46, 125, 50, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.submitButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.submitButton:hover {
+  background-position: right center;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
+}
+
+.submitButton:hover::before {
+  left: 100%;
+}
+
+.inputAreaCST {
+  height: 200px !important;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(76, 175, 80, 0.3);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  color: #1a5d1a;
+  font-size: 1rem;
+  padding: 1.2rem;
+  resize: none;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.inputAreaCST:focus {
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.15), 
+              inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+/* Animations */
+@keyframes moveCircle {
+  0% { transform: rotate(0deg) translate(0, 0); }
+  50% { transform: rotate(180deg) translate(20px, 20px); }
+  100% { transform: rotate(360deg) translate(0, 0); }
+}
+
+/* Responsive design */
+@media (max-width: 850px) {
+  .container {
+    width: 100%;
+    padding: 20px;
+  }
+  
+  .card {
+    width: 90%;
+    margin: 0 20px;
+    padding: 30px;
+  }
+  
+  .main {
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .container::before,
+  .container::after {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .container .ball-1,
+  .container .ball-2,
+  .container .ball-3,
+  .container .ball-4,
+  .container .ball-5 {
+    /* Make balls smaller on mobile */
+    transform: scale(0.7);
+  }
+  
+  /* Hide some balls on very small screens */
+  @media (max-width: 480px) {
+    .container .ball-4,
+    .container .ball-5 {
+      display: none;
+    }
+  }
+}
+
+/* Add shimmer effect to card */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.card {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.95) 25%,
+    rgba(255, 255, 255, 0.98) 50%,
+    rgba(255, 255, 255, 0.95) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0;
+  }
+  
+  .main {
+    padding: 20px 0; /* Remove left/right padding, keep top/bottom */
+  }
+  
+  .card {
+    width: 100%;
+    margin: 0; /* Remove margin */
+    border-radius: 0; /* Optional: remove border radius for edge-to-edge look */
+  }
+}

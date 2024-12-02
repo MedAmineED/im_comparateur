@@ -1,0 +1,208 @@
+.carouselContainer {
+    width: 100%;
+    height: 50vh;
+    position: relative;
+    perspective: 1000px;
+
+}
+.carouselClass{
+    align-items: start !important;
+    height: 100%;
+}
+.slide {
+    position: relative; 
+    width: 100vw;
+    height: 100%;
+    overflow: hidden;
+
+}
+
+.heroImageWrapper {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+    border-bottom-right-radius: 50%;
+    border-bottom: 2px solid rgb(36 181 30);
+    border-right: 2px solid rgb(36 181 30);
+    overflow: hidden;
+}
+
+.heroImage {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+
+}
+
+.heroOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100% !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+}
+
+.textContainer {
+    background: rgba(255, 255, 255, 0.74);
+    padding: 2rem;
+    width: 70%;
+    height: auto;
+    min-height: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    transition: ease 0.7s;
+    border-radius: 10px;
+    overflow: hidden;
+    word-wrap: break-word;
+    white-space: normal;
+    padding-right: 10%;
+    box-sizing: border-box;
+    margin: auto 0;
+    background-color: rgba(255, 255, 255, 0.74);
+    background-image: blur(10px);
+}
+
+/* when carrousel is hovered show heroparagraph and i want textcontainer to be 60% and 60% height width and height*/
+
+
+.carouselContainer:hover .heroParagraph{
+    color: rgb(0, 0, 0);
+    
+    transition: ease 0.7s;
+}
+
+
+
+.textContainer:hover {
+    background: rgb(172, 225, 175, 0.5);
+    backdrop-filter: blur(10px);
+    transition: ease 0.7s;
+}
+
+.heroTitle {
+    font-size: 1.5rem !important;
+    color: #ffffff;
+    text-shadow: 0px 4px 12px rgba(255, 255, 255, 0.6);
+    transition: color 0.3s ease, transform 0.3s ease;
+    
+}
+
+.heroTitle:hover {
+    color: #00d9ff;
+    transform: translateY(-5px);
+}
+
+.heroParagraph {
+    font-size: 1.2rem;
+    font-weight: bolder;
+    color: rgb(60, 85, 45);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.heroParagraph:hover {
+    opacity: 1;
+    transform: translateY(-3px);
+}
+
+.buttonContainer{
+    width : 100%;
+    max-width: 1500px;
+    height: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    padding-bottom: 20px;
+}
+
+.allonsYbtn {
+    height: 80px;
+    width: 200px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    transition: background-color 0.3s, transform 0.3s;
+    background: #4caf50 ;
+    backdrop-filter: blur(5px);
+    color: white;
+    border: 2px solid rgb(36 181 30);
+    margin-right: 3%;
+}
+
+.allonsYbtn:hover {
+    background: rgb(36 181 30) !important;
+    transform: translateY(-5px);
+}
+
+/* Add these media queries at the bottom */
+@media (max-width: 768px) {
+    .heroOverlay {
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .textContainer {
+        width: 100%;
+        margin: 0;
+        padding: 1rem;
+        align-items: center;
+    }
+
+    .buttonContainer {
+        width: 100%;
+        justify-content: center;
+        padding-bottom: 20px;
+    }
+
+    .allonsYbtn {
+        margin-right: 0;
+        height: 60px;
+        width: 180px;
+        font-size: 1.1rem;
+    }
+
+    .heroTitle {
+        font-size: 1.3rem !important;
+        text-align: center;
+    }
+
+    .heroParagraph {
+        font-size: 1rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .heroOverlay {
+        padding: 15px;
+    }
+
+    .textContainer {
+        padding: 0.8rem;
+    }
+
+    .allonsYbtn {
+        height: 50px;
+        width: 160px;
+        font-size: 1rem;
+    }
+
+    .heroTitle {
+        font-size: 1.1rem !important;
+    }
+
+    .heroParagraph {
+        font-size: 0.9rem;
+    }
+}

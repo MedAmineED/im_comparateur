@@ -1,0 +1,49 @@
+.aboutSection{
+    width: 100%;
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start; 
+    
+  }
+
+.guideCards {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+  }
+  .aboutTitle{
+    font-size: 1.8rem !important;
+    text-align: center;
+    color: #ffffff !important;
+    font-weight: bolder !important;
+    width: 200px !important;
+    border-bottom: 2px solid #80808047;
+    position: relative;
+  }
+  .aboutTitle::after {
+    content: "";
+    position: absolute;
+    width: 30%;
+    height: 2px;
+    background-color: #47b2e4;
+    top: 100%;
+    right: 50%;
+    transform : translateX(50%)
+  }
+.optionalParag{
+    text-align: center;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .guideCards {
+    justify-content: center;
+    gap: 2rem;
+  }
+}

@@ -1,0 +1,58 @@
+/* components/Signup.module.css */
+
+.container {
+    background-color: rgb(255, 255, 255);
+    color: rgba(0, 0, 0, 0.87);
+    min-height: 959px;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.main {
+    background-image: url('https://bro.call.tn/build/assets/auth-bg-8529ec0e.svg');
+    padding: 70px 192px;
+    background-color: rgb(246, 248, 250);
+    background-image: url('https://bro.call.tn/build/assets/auth-bg-8529ec0e.svg');
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 959px;
+    width: 100%;
+}
+  
+.logo {
+    width: auto;
+    height: 42px;
+    margin-bottom: 40px;
+}
+  
+.card {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px;
+    padding: 40px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 8px;
+    max-width: 440px;
+    width: 100%;
+    margin: 0 auto;
+}
+  
+.submitButton {
+    width: 100%;
+    font-weight: bold;
+}
+  
+.socialButtons {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+}
+  
+.signInPrompt{
+    margin-top: 20px;
+}
+  
+.signInPrompt .linkCST {
+    color: blue;
+}

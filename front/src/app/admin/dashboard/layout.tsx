@@ -10,7 +10,7 @@ import {
   VideoCameraOutlined,
   LogoutOutlined,
 } from '@ant-design/icons';
-import { Button, Layout, Menu, theme, message } from 'antd';
+import { Button, Layout, Menu, Modal, theme, message } from 'antd';
 import styles from './Dashboard.module.css';
 import AuthService from '../../API/AuthService';
 
@@ -47,6 +47,7 @@ const DashboardLayout = ({
 }>) => {
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+  const [isLogoutModalVisible, setIsLogoutModalVisible] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -60,6 +61,19 @@ const DashboardLayout = ({
       console.error('Logout error:', error);
       message.error('Erreur lors de la déconnexion');
     }
+  };
+
+  const showLogoutConfirmation = () => {
+    setIsLogoutModalVisible(true);
+  };
+
+  const handleLogoutCancel = () => {
+    setIsLogoutModalVisible(false);
+  };
+
+  const handleLogoutConfirm = () => {
+    setIsLogoutModalVisible(false);
+    handleLogout();
   };
 
   return (
@@ -80,7 +94,7 @@ const DashboardLayout = ({
         <Button 
           type="text" 
           icon={<LogoutOutlined />} 
-          onClick={handleLogout}
+          onClick={showLogoutConfirmation}
           style={{ 
             width: '100%', 
             color: '#fff',
@@ -119,6 +133,16 @@ const DashboardLayout = ({
           {children}
         </Content>
       </Layout>
+      <Modal
+        title="Confirmation de déconnexion"
+        open={isLogoutModalVisible}
+        onOk={handleLogoutConfirm}
+        onCancel={handleLogoutCancel}
+        okText="Déconnexion"
+        cancelText="Annuler"
+      >
+        <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
+      </Modal>
     </Layout>
   );
 };

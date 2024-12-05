@@ -8,35 +8,49 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ActualiteController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\GuideController;
+use App\Http\Middleware\IsAdmin;
 
 // Route protégée pour récupérer l'utilisateur authentifié
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-// Route d'inscription pour les utilisateurs
+// Public routes
 Route::post('/register', [AuthControllers::class, 'register']);
-Route::post('/login', [AuthControllers::class, 'login']); // Ajout de la route de login
+Route::post('/login', [AuthControllers::class, 'login']);
 
-// Routes de gestion des actualités
-Route::apiResource('actualites', ActualiteController::class);
-Route::apiResource('guides', GuideController::class);
+// Public routes for reading actualities
+Route::get('actualites', [ActualiteController::class, 'index']);
+Route::get('actualites/{id}', [ActualiteController::class, 'show']);
+
+// Protected routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('actualites', [ActualiteController::class, 'store']);
+    Route::put('actualites/{id}', [ActualiteController::class, 'update']);
+    Route::delete('actualites/{id}', [ActualiteController::class, 'destroy']);
+    Route::put('clients/{id}', [ClientController::class, 'update']); 
+    Route::post('clients', [ClientController::class, 'store']); 
+    Route::delete('clients/{id}', [ClientController::class, 'destroy']);
+    Route::middleware('isAdmin')->group(function () {
+        Route::get('/users', [UserController::class, 'index']);
+        Route::post('/users', [UserController::class, 'store']);
+        Route::put('/users/{id}', [UserController::class, 'update']);
+        Route::delete('/users/{id}', [UserController::class, 'destroy']);
+        Route::put('/user/{user}', [AuthControllers::class, 'update']);
+    });
+});
 
 // Public client creation endpoint
-Route::post('/clients/public', [ClientController::class, 'storePublic']);
+
 
 Route::prefix('clients')->group(function () {
+    Route::post('/public', [ClientController::class, 'storePublic']);
     Route::get('/', [ClientController::class, 'index']);       // Get all clients
-    Route::post('/', [ClientController::class, 'store']);      // Create a new client
     Route::get('/{id}', [ClientController::class, 'show']);    // Get a single client
-    Route::put('/{id}', [ClientController::class, 'update']);  // Update a client
-    Route::delete('/{id}', [ClientController::class, 'destroy']); // Delete a client
+     // Update a client
+     // Delete a client
 });
 
 Route::post('/send-email', [EmailController::class, 'sendEmail']);
 
-// Groupes de routes protégées par l'authentification
-Route::middleware('auth:sanctum')->group(function () {
-    // Route de mise à jour d'un utilisateur, seulement accessible par les admins
-    Route::middleware('is_admin')->put('/user/{user}', [AuthControllers::class, 'update']);
-});
+Route::apiResource('guides', GuideController::class);

@@ -1,16 +1,9 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import ApiUrls from './ApiURLs/ApiURLs';
 import Cookies from 'js-cookie';
+import { ClientEntity } from '../entities/ClientEntity';
 
-export interface ClientEntity {
-    id?: number;
-    firstname: string;
-    lastname: string;
-    email: string;
-    tel: string;
-    age: number;
-    address: string;
-}
+
 
 class ClientService {
     private getAuthHeaders() {
@@ -22,10 +15,10 @@ class ClientService {
         };
     }
 
-    private handleAxiosError(error: any, message: string): never {
+    private handleAxiosError(error: unknown, message: string): never {
         if (axios.isAxiosError(error)) {
-            const axiosError = error as AxiosError;
-            throw new Error(`${message}: ${axiosError.response?.data?.error || axiosError.message}`);
+            const axiosError = error;
+            throw new Error(`${message}: ${(axiosError.response?.data as { message: string })?.message || axiosError.message}`);
         }
         throw error;
     }
@@ -61,7 +54,19 @@ class ClientService {
 
     async createClient(client: Omit<ClientEntity, 'id'>): Promise<ClientEntity> {
         try {
-            const response = await axios.post<ClientEntity>(`${ApiUrls.CLIENT}/public`, client, {
+            const response = await axios.post<ClientEntity>(ApiUrls.CLIENT, client, {
+                headers: this.getAuthHeaders()
+            });
+            return response.data;
+        } catch (error) {
+            this.handleAxiosError(error, 'Erreur lors de la création du client');
+            throw error;
+        }
+    }
+
+    async createClientPublic(client: Omit<ClientEntity, 'id'>): Promise<ClientEntity> {
+        try {
+            const response = await axios.post<ClientEntity>(ApiUrls.CLIENT_PUBLIC, client, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',

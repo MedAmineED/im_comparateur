@@ -1,9 +1,13 @@
 .heroNewMain{
     height: 100%;
+    position: relative;
+    overflow: hidden;
 }
 
 .semIHero {
     height : 100%;
+    position: relative;
+    z-index: 2;
 }
 
 .thirdContaner {
@@ -13,6 +17,7 @@
 .imgContainer {
     height: 100%
 }
+
 .scondImageCont {
     height: 100%;
     overflow: hidden;
@@ -20,4 +25,183 @@
 
 .btnStyle{
     background-color:#4caf50 !important;
+    font-size: 1.1rem !important;
+    height: auto !important;
+    padding: 0.75rem 2rem !important;
+    border-radius: 8px !important;
+    z-index: 10 !important;
+    position: relative !important;
+    white-space: normal !important;
+    line-height: 1.2 !important;
+}
+
+.heroBackground {
+  display: none;
+}
+
+.desktopOnly {
+  display: block;
+}
+
+/* Text styles */
+.heroContent h1 {
+  font-size: 2.5rem !important;
+  line-height: 1.2 !important;
+  font-weight: 700 !important;
+}
+
+.heroContent .ant-typography {
+  font-size: 1.125rem !important;
+  line-height: 1.6 !important;
+}
+
+@media (max-width: 1024px) {
+  .heroContent h1 {
+    font-size: 2.2rem !important;
+  }
+
+  .heroContent .ant-typography {
+    font-size: 1.1rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroBackground {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .heroBackground::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.7)
+    );
+    z-index: 2;
+  }
+
+  .heroContent {
+    position: relative;
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .heroContent h1 {
+    font-size: 2rem !important;
+    margin-bottom: 1rem !important;
+    color: white !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .heroContent .ant-typography {
+    font-size: 1.05rem !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .desktopOnly {
+    display: none;
+  }
+
+  .btnStyle {
+    font-size: 1rem !important;
+    padding: 0.7rem 1.8rem !important;
+    margin-top: 1rem !important;
+    background-color: #4caf50 !important;
+    border: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroContent {
+    padding: 1.5rem;
+    margin: 0.5rem;
+  }
+
+  .heroContent h1 {
+    font-size: 1.5rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .heroContent .ant-typography {
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .btnStyle {
+    font-size: 0.95rem !important;
+    padding: 0.6rem 1rem !important;
+    width: 100% !important;
+    text-align: center !important;
+    margin-top: 1rem !important;
+    white-space: normal !important;
+    height: auto !important;
+    min-height: 40px !important;
+  }
+}
+
+@media (max-width: 414px) {
+  .heroContent {
+    padding: 1.25rem;
+  }
+
+  .heroContent h1 {
+    font-size: 1.35rem !important;
+    line-height: 1.25 !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .heroContent .ant-typography {
+    font-size: 0.95rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .btnStyle {
+    font-size: 0.9rem !important;
+    padding: 0.5rem 0.75rem !important;
+    margin-top: 0.75rem !important;
+    line-height: 1.2 !important;
+    min-height: 36px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .heroContent {
+    padding: 1rem;
+  }
+
+  .heroContent h1 {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .heroContent .ant-typography {
+    font-size: 0.9rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .btnStyle {
+    font-size: 0.85rem !important;
+    padding: 0.4rem 0.6rem !important;
+    min-height: 32px !important;
+  }
 }

@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { 
   Form, 
   Select, 
-  InputNumber, 
   Button, 
   Card, 
   Row, 
@@ -37,8 +36,14 @@ interface InsuranceResult {
   tag: string;
 }
 
+interface FormValues {
+  typeAssurance: 'base' | 'complementaire';
+  canton: string;
+  age: string;
+}
+
 const Page: React.FC = () => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<FormValues>();
   const [results] = useState<InsuranceResult[]>([
     {
       name: 'Assurance Helvetia Premium',
@@ -69,7 +74,7 @@ const Page: React.FC = () => {
     }
   ]);
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: FormValues) => {
     console.log('Comparison form values:', values);
   };
 
@@ -93,7 +98,7 @@ const Page: React.FC = () => {
             <Space direction="vertical" size="large">
               <Title level={2} style={{ color: '#1A3B5A', marginBottom: 0 }}>
                 <SafetyOutlined style={{ marginRight: 10, color: '#4A90E2' }} />
-                Comparateur d'Assurances
+                Comparateur d&apos;Assurances
               </Title>
               <Paragraph type="secondary" style={{ fontSize: 16 }}>
                 Trouvez la protection idéale adaptée à vos besoins spécifiques. Comparez, analysez et choisissez en toute confiance.
@@ -145,30 +150,14 @@ const Page: React.FC = () => {
                     </Form.Item>
                   </Col>
                 </Row>
-                                <Row gutter={16}>
+                <Row gutter={16}>
                   <Col span={12}>
-                  <Form.Item 
+                    <Form.Item 
                       name="age" 
                       label="Age"
                       rules={[{ required: true }]}
                     >
                       <Input />
-                    </Form.Item>
-                  </Col>
-                  <Col span={12}>
-                    <Form.Item 
-                      name="canton" 
-                      label="Canton"
-                      rules={[{ required: true }]}
-                    >
-                      <Select 
-                        placeholder="Votre région"
-                        suffixIcon={<StarOutlined />}
-                      >
-                        <Option value="zurich">Zurich</Option>
-                        <Option value="geneve">Genève</Option>
-                        <Option value="vaud">Vaud</Option>
-                      </Select>
                     </Form.Item>
                   </Col>
                 </Row>

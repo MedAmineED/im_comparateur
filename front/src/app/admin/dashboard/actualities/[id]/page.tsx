@@ -8,6 +8,7 @@ import ActualitiesServices from '@/app/API/ActualitiesServices';
 import ApiUrls from '@/app/API/ApiURLs/ApiURLs';
 import { ActualityEntity } from '@/app/entities/ActualityEntity';
 import type { UploadFile } from 'antd/es/upload/interface';
+import { IMAGES_STORE } from '@/app/API/ApiURLs/ImagesUrls';
 
 const EditActuality: React.FC = () => {
   const router = useRouter();
@@ -15,27 +16,35 @@ const EditActuality: React.FC = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(true);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
+ 
   useEffect(() => {
     const fetchActuality = async () => {
       try {
-        const actualities = await ActualitiesServices.GetAllActualities(`${ApiUrls.ACTUALITY}/${id}`);
+        const actualities = await ActualitiesServices.GetActualityById(`${ApiUrls.ACTUALITES}`,parseInt(id as string));
         const actuality = Array.isArray(actualities) ? actualities[0] : actualities;
         
         if (actuality) {
-          form.setFieldsValue(actuality);
+          form.setFieldsValue({
+            title: actuality.title,
+            excerpt: actuality.excerpt,
+            content: actuality.content,
+          });
+          
+          // If there's an image, create a file list entry for it
           if (actuality.image) {
-            setFileList([{ 
+            const imageUrl =  IMAGES_STORE + actuality.image;
+              
+            setFileList([{
               uid: '-1',
-              name: 'image',
+              name: actuality.image.split('/').pop() || 'image',
               status: 'done',
-              url: actuality.image 
+              url: imageUrl,
             }]);
           }
         }
       } catch (error) {
         console.error("Error fetching actuality:", error);
-        message.error("Erreur lors du chargement de l&apos;actualité");
+        message.error("Erreur lors du chargement de l'actualité");
       } finally {
         setLoading(false);
       }
@@ -46,16 +55,35 @@ const EditActuality: React.FC = () => {
 
   const onFinish = async (values: ActualityEntity) => {
     try {
+      console.log('Form values:', values);
       const formData = new FormData();
-      Object.entries(values).forEach(([key, value]) => {
-        formData.append(key, value as string);
-      });
+      
+      // Add form fields to FormData
+      formData.append('title', values.title);
+      formData.append('excerpt', values.excerpt);
+      formData.append('content', values.content);
+      formData.append('_method', 'PUT'); // Laravel/Symfony style method override
 
-      if (fileList.length > 0 && fileList[0].originFileObj) {
-        formData.append('image', fileList[0].originFileObj);
+      // Only append image if a new file is selected
+      if (fileList.length > 0) {
+        if (fileList[0].originFileObj) {
+          console.log('Uploading new image');
+          formData.append('image', fileList[0].originFileObj);
+        } else if (fileList[0].url) {
+          console.log('Keeping existing image');
+          const existingImage = fileList[0].url.split('/').pop();
+          formData.append('existing_image', existingImage || '');
+        }
       }
 
-      await ActualitiesServices.UpdateActuality(ApiUrls.ACTUALITY, Number(id), formData);
+      // Log FormData contents
+      formData.forEach((value, key) => {
+        console.log(key, value);
+      });
+
+      const response = await ActualitiesServices.UpdateActuality(ApiUrls.ACTUALITES, Number(id), formData);
+      console.log('Update response:', response);
+      
       message.success("Actualité mise à jour avec succès");
       router.push('/admin/dashboard/actualities');
     } catch (error) {
@@ -65,7 +93,22 @@ const EditActuality: React.FC = () => {
   };
 
   const handleUploadChange = ({ fileList: newFileList }: { fileList: UploadFile[] }) => {
-    setFileList(newFileList);
+    // Only keep the latest file
+    setFileList(newFileList.slice(-1));
+  };
+
+  const uploadProps = {
+    beforeUpload: (file: File) => {
+      const isImage = file.type.startsWith('image/');
+      if (!isImage) {
+        message.error('Vous pouvez uniquement télécharger des images!');
+        return false;
+      }
+      return false; // Prevent auto upload
+    },
+    maxCount: 1,
+    fileList,
+    onChange: handleUploadChange,
   };
 
   return (
@@ -84,14 +127,16 @@ const EditActuality: React.FC = () => {
           <Form.Item name="content" label="Contenu" rules={[{ required: true, message: 'Veuillez entrer le contenu' }]}>
             <Input.TextArea rows={4} />
           </Form.Item>
-          <Form.Item label="Image">
-            <Upload
+          <Form.Item
+            label="Image"
+            name="image"
+          >
+            <Upload 
+              {...uploadProps}
               listType="picture"
-              fileList={fileList}
-              beforeUpload={() => false}
-              onChange={handleUploadChange}
+              accept="image/*"
             >
-              <Button icon={<UploadOutlined />}>Upload</Button>
+              <Button icon={<UploadOutlined />}>Sélectionner une image</Button>
             </Upload>
           </Form.Item>
           <Form.Item>

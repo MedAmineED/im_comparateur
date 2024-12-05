@@ -10,11 +10,16 @@ use Exception;
 
 class ActualiteController extends Controller
 {
+
+
     // Retrieve all Actualités
     public function index()
     {
         try {
             $actualites = Actualite::with('utilisateur')->get();
+            
+            return $actualites;
+            
             return response()->json($actualites);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -26,6 +31,9 @@ class ActualiteController extends Controller
     {
         try {
             $actualite = Actualite::with('utilisateur')->findOrFail($id);
+            
+
+            
             return response()->json($actualite);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 404);
@@ -35,48 +43,65 @@ class ActualiteController extends Controller
     // Admin routes - require authentication
     public function store(Request $request)
     {
+        // Check authentication first
         if (!auth()->check()) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-
-        // Validate request data
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'date_creation' => 'required|date',
-            'user_id' => 'required|exists:users,id',
-            'excerpt' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
-        $date_creation = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $request->date_creation)->format('Y-m-d');
-
+    
         try {
-            // Handle image upload with try-catch for error handling
-            $imagePath = null;
-
-            if ($request->hasFile('image')) {
-                // Store image in the public disk
-                $imagePath = $request->file('image')->store('images/actualites', 'public');
-            }
-
-            // Create the Actualite using the validated data and image path
-            $actualite = Actualite::create(array_merge($validatedData, ['date_creation' => $date_creation, 'image' => $imagePath]));
-            return response()->json($actualite, 201);
-
-        } catch (Exception $e) {
-            // Log the error with the request data and any relevant information
-            Log::error('Failed to store Actualite: ' . $e->getMessage(), [
-                'request_data' => $request->all(),
-                'image_path' => $imagePath ?? 'No image uploaded', // Check if imagePath is null
+            // Validate request data with more robust rules
+            $validatedData = $request->validate([
+                'title' => 'required|string|max:255',
+                'content' => 'required|string',
+                'date_creation' => 'required|date',
+                'excerpt' => 'required|string|max:255',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
             ]);
-
-            // Return a generic error response with the message and additional details
+    
+            // Parse and format date
+            $date_creation = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $request->date_creation)
+                ->format('Y-m-d');
+    
+            // Handle image upload directly to public/storage
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('storage/images/actualities'), $imageName);
+                $validatedData['image'] = 'images/actualities/' . $imageName;
+            }
+    
+            // Create Actualite with authenticated user's ID
+            $actualiteData = array_merge($validatedData, [
+                'date_creation' => $date_creation,
+                'user_id' => auth()->id() // Use authenticated user's ID
+            ]);
+    
+            $actualite = Actualite::create($actualiteData);
+    
+            return response()->json($actualite, 201);
+    
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Log validation errors
+            Log::warning('Validation failed for Actualite creation', [
+                'errors' => $e->errors(),
+                'input' => $request->except('image') // Exclude image from log for privacy
+            ]);
+    
             return response()->json([
-                'error' => 'Failed to save Actualite. Please try again.',
-                'message' => $e->getMessage(), // Include the actual error message for debugging
-                'request_data' => $request->all(),
-                'image_path' => $imagePath ?? 'No image uploaded' // Ensure safe value for logging
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+    
+        } catch (\Exception $e) {
+            // Log unexpected errors
+            Log::error('Failed to store Actualite', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+    
+            return response()->json([
+                'error' => 'An unexpected error occurred',
+                'message' => $e->getMessage()
             ], 500);
         }
     }
@@ -104,7 +129,10 @@ class ActualiteController extends Controller
                 if ($actualite->image) {
                     Storage::disk('public')->delete($actualite->image); // Delete old image
                 }
-                $validatedData['image'] = $request->file('image')->store('images/actualites', 'public');
+                $image = $request->file('image');
+                $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('storage/images/actualities'), $imageName);
+                $validatedData['image'] = 'images/actualities/' . $imageName;
             }
 
             // Update Actualite with validated data

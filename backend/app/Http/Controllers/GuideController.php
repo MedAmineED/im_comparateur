@@ -23,7 +23,7 @@ class GuideController extends Controller
     }
 
     public function store(Request $request)
-    {
+    { 
         $validatedData = $request->validate([
             'title' => 'required|string',
             'description' => 'required|string',
@@ -41,10 +41,12 @@ class GuideController extends Controller
         try {
             DB::beginTransaction();
 
-            // Handle icon image upload
+            // Handle icon image upload directly to public/storage
             if ($request->hasFile('icon_image')) {
-                $iconPath = $request->file('icon_image')->store('images/guides', 'public');
-                $validatedData['icon_image'] = $iconPath;
+                $image = $request->file('icon_image');
+                $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('storage/images/guides'), $imageName);
+                $validatedData['icon_image'] = 'images/guides/' . $imageName;
             }
 
             // Remove steps from validatedData as we'll handle them separately
@@ -91,14 +93,16 @@ class GuideController extends Controller
 
             $guide = Guide::findOrFail($id);
 
-            // Handle icon image upload
+            // Handle icon image upload directly to public/storage
             if ($request->hasFile('icon_image')) {
                 // Delete old icon if exists
                 if ($guide->icon_image) {
                     Storage::disk('public')->delete($guide->icon_image);
                 }
-                $iconPath = $request->file('icon_image')->store('images/guides', 'public');
-                $validatedData['icon_image'] = $iconPath;
+                $image = $request->file('icon_image');
+                $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('storage/images/guides'), $imageName);
+                $validatedData['icon_image'] = 'images/guides/' . $imageName;
             }
 
             // Remove steps from validatedData as we'll handle them separately

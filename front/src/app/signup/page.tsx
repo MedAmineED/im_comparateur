@@ -3,11 +3,10 @@ import React, { useState, useRef } from 'react';
 import { Button, Form, Input, Typography, Row, Col, Modal } from 'antd';
 import styles from './Signup.module.css';
 import Image from 'next/image';
-import RegisterServices from '../API/RegisterServices';
-import ApiUrls from '../API/ApiURLs/ApiURLs';
-import { RegisterEntity } from '../entities/RegisterEntity';
 import VerificationCodeInputs from '../components/register/VerificationCodeInputs';
 import type { InputRef } from 'antd';
+import clientService from '../API/ClientService';
+import { ClientEntity } from '../entities/ClientEntity';
 
 const { Title } = Typography;
 
@@ -20,22 +19,21 @@ const Page: React.FC = () => {
         setIsVerificationVisible(true);
         console.log('Form submitted with values:', values);
         try {
-            const registerData: RegisterEntity = {
+            const registerData: ClientEntity = {
                 firstname: values.firstname as string,
                 lastname: values.lastname as string,
                 age: Number(values.age),
                 tel: values.tel as string,
                 address: values.address as string,
-                email: values.email as string,
-                password: values.password as string
+                email: values.email as string
             };
 
-            const response = await RegisterServices.Register(ApiUrls.CLIENT, registerData);
+            const response = await clientService.createClientPublic(registerData);
             console.log(response)
             console.log("adding with success") 
         } catch(error){
             console.log(error)
-        }
+        } 
     };
 
     const onValuesChange = (changedValues: Record<string, unknown>, allValues: Record<string, unknown>) => {
@@ -109,20 +107,20 @@ const Page: React.FC = () => {
                         </Row>
                         <Form.Item
                             name="tel"
-                            label="Numero de telephone"
+                            label="Téléphone"
                             rules={[
-                                { required: true, message: 'Veuillez saisir votre numero de telephone!' },
+                                { required: true, message: 'Veuillez saisir votre numéro de téléphone!' },
                                 { pattern: /^\d{10}$/, message: 'Entrez un numéro valide à 10 chiffres' },
                             ]}
                             >
-                            <Input type="text" placeholder="Entrez votre numero de telephone!" />
+                            <Input type="tel" placeholder="Entrez votre numéro de téléphone" />
                         </Form.Item>
                         <Form.Item
                             name="email"
                             label="Email"
                             rules={[
                                 { required: true, message: 'Veuillez saisir votre email!' },
-                                { type: 'email', message: 'Entrez un email valide' },
+                                { type: 'email', message: 'Entrez un email valide!' }
                             ]}
                             >
                             <Input type="email" placeholder="Entrez votre email" />

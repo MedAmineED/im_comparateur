@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import GuideService from '@/app/API/GuideService'
 import type { GuideEntity } from '@/app/entities/GuideEntity'
 import Image from 'next/image'
+import { IMAGES_STORE } from '../API/ApiURLs/ImagesUrls'
 
 const funFacts = [
   "Saviez-vous que la première assurance vie a été vendue à Londres en 1583 ?",
@@ -88,7 +89,7 @@ const Page = () => {
                 cover={
                   <div className={styles.cardIcon}>
                     <Image 
-                      src={`http://localhost:8000/storage/${guide.icon_image}`}
+                      src={`${IMAGES_STORE + guide.icon_image}`}
                       alt={guide.title}
                       width={screens.xs ? 80 : 100}
                       height={screens.xs ? 80 : 100}

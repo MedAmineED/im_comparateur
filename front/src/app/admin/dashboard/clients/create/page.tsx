@@ -4,7 +4,7 @@ import React from 'react';
 import { Form, Input, Button, message, InputNumber } from 'antd';
 import { useRouter } from 'next/navigation';
 import ClientService from '@/app/API/ClientService';
-import type { ClientEntity } from '@/app/API/ClientService';
+import { ClientEntity } from '@/app/entities/ClientEntity';
 
 const CreateClient = () => {
   const router = useRouter();

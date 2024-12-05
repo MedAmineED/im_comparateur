@@ -4,6 +4,7 @@ interface ApiUrlsInterface {
     readonly ACTUALITES: string,
     readonly GUIDE: string,
     readonly CLIENT: string,
+    CLIENT_PUBLIC: string,
     readonly BASE_URL: string,
     readonly AUTH: {
         readonly LOGIN: string,
@@ -16,6 +17,7 @@ const ApiUrls: ApiUrlsInterface = {
     ACTUALITES: `${url}api/actualites`,
     GUIDE: `${url}api/guides`,
     CLIENT: `${url}api/clients`,
+    CLIENT_PUBLIC: `${url}api/clients/public`,
     BASE_URL: url,
     AUTH: {
         LOGIN: `${url}api/login`,

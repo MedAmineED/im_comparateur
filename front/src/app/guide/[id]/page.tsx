@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import GuideService from '@/app/API/GuideService'
 import type { GuideEntity } from '@/app/entities/GuideEntity'
 import Image from 'next/image'
+import { IMAGES_STORE } from '@/app/API/ApiURLs/ImagesUrls'
 
 const Page = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
@@ -64,7 +65,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className={styles.headerTop}>
               <div className={styles.icon}>
                 <Image 
-                  src={`http://localhost:8000/storage/${guide.icon_image}`}
+                  src={`${IMAGES_STORE + guide.icon_image}`}
                   alt={guide.title}
                   width={100}
                   height={100}

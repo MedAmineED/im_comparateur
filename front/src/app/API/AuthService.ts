@@ -28,26 +28,35 @@ class AuthService {
   constructor() {
     if (typeof window !== 'undefined') {
       this.token = Cookies.get('auth_token') || null;
+      console.log('AuthService initialized with token:', this.token ? 'exists' : 'null');
     }
   }
 
   async login(credentials: LoginCredentials): Promise<LoginResponse> {
     try {
+      console.log('Attempting login with credentials:', { username: credentials.user_name });
       const response = await this.axiosInstance.post<LoginResponse>(
         ApiUrls.AUTH.LOGIN,
         credentials
       );
 
       this.token = response.data.token;
+      console.log('Received token from login:', this.token ? 'exists' : 'null');
+      
       if (typeof window !== 'undefined') {
         // Store token in both cookie and localStorage
         Cookies.set('auth_token', this.token, { 
           expires: 7, // 7 days
           path: '/',
-          sameSite: 'strict'
+          sameSite: 'lax'  // Changed to lax for better compatibility
         });
         localStorage.setItem('auth_token', this.token);
+        console.log('Token stored in cookies and localStorage');
       }
+      
+      // Set up axios interceptors after successful login
+      this.setupAxiosInterceptors();
+      
       return response.data;
     } catch (error) {
       console.error('Login error:', error);
@@ -93,15 +102,39 @@ class AuthService {
   }
 
   setupAxiosInterceptors(): void {
-    this.axiosInstance.interceptors.request.use(
+    // Remove any existing interceptors
+    axios.interceptors.request.eject(0);
+    
+    // Add new interceptor
+    axios.interceptors.request.use(
       (config) => {
         const token = this.getToken();
+        console.log('Interceptor adding token to request:', token ? 'exists' : 'null');
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
+          console.log('Authorization header set:', config.headers.Authorization.substring(0, 20) + '...');
         }
         return config;
       },
       (error) => {
+        console.error('Interceptor error:', error);
+        return Promise.reject(error);
+      }
+    );
+
+    // Also set up for the instance used in this service
+    this.axiosInstance.interceptors.request.use(
+      (config) => {
+        const token = this.getToken();
+        console.log('Interceptor adding token to request:', token ? 'exists' : 'null');
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+          console.log('Authorization header set:', config.headers.Authorization.substring(0, 20) + '...');
+        }
+        return config;
+      },
+      (error) => {
+        console.error('Interceptor error:', error);
         return Promise.reject(error);
       }
     );

@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, Modal, Form, Input, message } from 'antd';
 import type { TableProps } from 'antd';
-import { ClientEntity } from '@/app/entities/ClientEntity';
+import clientService from '@/app/API/ClientService';
 import HeaderCST from '@/app/components/headerCST/HeaderCST';
-import ClientService from '@/app/API/ClientService';
+import { ClientEntity } from '@/app/entities/ClientEntity';
 
 const DashboardPage: React.FC = () => {
     const [clients, setClients] = useState<ClientEntity[]>([]);
@@ -21,7 +21,7 @@ const DashboardPage: React.FC = () => {
     const fetchClients = async () => {
         setLoading(true);
         try {
-            const data = await ClientService.getAllClients();
+            const data = await clientService.getAllClients();
             setClients(data);
         } catch {
             message.error('Échec de la récupération des clients');
@@ -51,7 +51,7 @@ const DashboardPage: React.FC = () => {
             cancelText: 'Non',
             onOk: async () => {
                 try {
-                    await ClientService.deleteClient(id);
+                    await clientService.deleteClient(id);
                     message.success('Client supprimé avec succès');
                     fetchClients();
                 } catch {
@@ -65,10 +65,11 @@ const DashboardPage: React.FC = () => {
         try {
             const values = await form.validateFields();
             if (editingId) {
-                await ClientService.updateClient(editingId, values);
+                console.log(values)
+                await clientService.updateClient(editingId, values);
                 message.success('Client modifié avec succès');
             } else {
-                await ClientService.createClient(values);
+                await clientService.createClient(values);
                 message.success('Client créé avec succès');
             }
             setIsModalVisible(false);

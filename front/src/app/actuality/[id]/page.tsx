@@ -9,6 +9,7 @@ import ActualitiesService from '@/app/API/ActualitiesServices'
 import type { ActualityEntity } from '@/app/entities/ActualityEntity'
 import Image from 'next/image'
 import ApiUrls from '@/app/API/ApiURLs/ApiURLs'
+import { IMAGES_STORE } from '@/app/API/ApiURLs/ImagesUrls'
 
 const Page = ({ params }: { params: { id: string } }) => {
   const router = useRouter()
@@ -61,7 +62,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             <div className={styles.headerTop}>
               <div className={styles.imageContainer}>
                 <Image 
-                  src={`http://localhost:8000/storage/${actuality.image}`}
+                  src={IMAGES_STORE + actuality.image}
                   alt={actuality.title}
                   layout="fill"
                   objectFit="cover"

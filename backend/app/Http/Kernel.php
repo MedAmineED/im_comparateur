@@ -20,6 +20,7 @@ class Kernel extends HttpKernel
         \Illuminate\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\LoadConfiguration::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        \Fruitcake\Cors\HandleCors::class,
     ];
 
     /**
@@ -40,11 +41,10 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            \App\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            'throttle:api',
+            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Fruitcake\Cors\HandleCors::class,
         ],
     ];
 
@@ -65,7 +65,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
-        // Ajout du middleware is_admin
-        'is_admin' => \App\Http\Middleware\IsAdmin::class,
+        // Ajout du middleware isAdmin
+        'isAdmin' => \App\Http\Middleware\IsAdmin::class,
     ];
 }

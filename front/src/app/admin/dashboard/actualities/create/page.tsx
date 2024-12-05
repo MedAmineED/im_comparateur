@@ -2,19 +2,16 @@
 import React from 'react';
 import { Button, Form, Input, DatePicker, Upload, Card, Space } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import styles from './CreateActuality.module.css';
 import ActualitiesServices from '@/app/API/ActualitiesServices';
 import { ActualityEntity } from '@/app/entities/ActualityEntity';
 import ApiUrls from '@/app/API/ApiURLs/ApiURLs';
 import type { UploadFile } from 'antd/es/upload/interface';
+import { useRouter } from 'next/navigation';
 
 const { TextArea } = Input;
 
-interface FormValues extends Omit<ActualityEntity, 'date_creation' | 'image'> {
-  date_creation: Dayjs;
-  image: UploadFile[];
-}
 
 // Define form layout based on screen size
 const formItemLayout = {
@@ -23,9 +20,10 @@ const formItemLayout = {
 };
 
 const Page: React.FC = () => {
-  const [form] = Form.useForm<FormValues>();
+  const [form] = Form.useForm();
+  const router = useRouter();
 
-  const handleSubmit = async (values: FormValues) => {
+  const handleSubmit = async (values: ActualityEntity & { image: UploadFile[] }) => {
     console.log("Form Values:", values);
 
     // Create FormData to handle image upload
@@ -33,15 +31,22 @@ const Page: React.FC = () => {
     formData.append('title', values.title);
     formData.append('excerpt', values.excerpt);
     formData.append('content', values.content);
-    formData.append('date_creation', values.date_creation.format("YYYY-MM-DD HH:mm:ss"));
-    formData.append('user_id', values.user_id.toString());
-    if (values.image?.[0]?.originFileObj) {
+    formData.append('date_creation', dayjs(values.date_creation).format("YYYY-MM-DD HH:mm:ss"));
+
+    // Append the image file
+    if (values.image && values.image[0]?.originFileObj) {
+      console.log("image exists");
+      console.log(values.image[0]);
       formData.append('image', values.image[0].originFileObj);
+    } else {
+      console.error("No image file provided");
+      return;
     }
 
     try {
-      await ActualitiesServices.CreateActuality(ApiUrls.ACTUALITY, formData);
+      await ActualitiesServices.CreateActuality(ApiUrls.ACTUALITES, formData);
       console.log("Added successfully");
+      router.push('/admin/dashboard/actualities');
     } catch (err) {
       console.error("Error creating actuality:", err);
     }
@@ -104,13 +109,8 @@ const Page: React.FC = () => {
             </Upload.Dragger>
           </Form.Item>
 
-          {/* User ID (Hidden as default 1) */}
-          <Form.Item name="user_id" initialValue={1} noStyle>
-            <Input type="hidden" />
-          </Form.Item>
-
-            {/* Date of Creation */}
-            <Form.Item
+          {/* Date of Creation */}
+          <Form.Item
             name="date_creation"
             label="Date de création"
             rules={[{ required: true, message: "Veuillez sélectionner une date" }]}
@@ -122,12 +122,6 @@ const Page: React.FC = () => {
               style={{ width: '100%' }}
             />
           </Form.Item>
-
-          {/* User ID (Hidden as default 1) */}
-          <Form.Item name="user_id" initialValue={1} noStyle>
-            <Input type="hidden" />
-          </Form.Item>
-
 
           {/* Action Buttons */}
           <Form.Item wrapperCol={{ xs: { span: 24 }, sm: { span: 18, offset: 6 } }}>

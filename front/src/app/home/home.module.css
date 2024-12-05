@@ -10,8 +10,9 @@
 .hero {
   position: relative;
   height: 70vh;
-  margin-bottom: 4rem; /* Space between hero and the next section */
+  margin-bottom: 6rem; /* Space between hero and the next section */
   margin-top: 100px;
+  overflow: hidden;
 }
 
 .carousel {
@@ -86,20 +87,26 @@
 }
 
 .about {
+  position: relative;
   padding: 4rem 0;
   background-color: #f1f8e9;
   padding: 40px !important;
+  margin-top: 2rem;
 }
 
 .aboutColText{
   padding: 20px;
+  position: relative;
+  z-index: 2;
 }
 
 .aboutImage {
   width: 100%;
   max-width: 500px;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: block;
+  height: auto;
+  object-fit: cover;
 }
 
 .sectionTitle {
@@ -183,10 +190,27 @@
   opacity: 1;
 }
 
+.heroContent {
+  position: relative;
+  z-index: 2;
+  padding: 2rem;
+}
+
+.heroBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
 /* Responsive Breakpoints */
 @media (max-width: 1024px) {
   .hero {
     height: 500px;
+    margin-bottom: 5rem;
   }
 
   .slide {
@@ -206,6 +230,46 @@
 @media (max-width: 768px) {
   .hero {
     height: 60vh;
+    margin-bottom: 4rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .heroContent {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 1rem;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .heroBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .heroBackground::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.6)
+    );
+    z-index: 1;
   }
 
   .slide {
@@ -238,11 +302,31 @@
   }
 
   .about {
+    position: relative;
     text-align: center;
+    background-color: transparent;
+    padding: 0 !important;
+  }
+
+  .aboutColText {
+    background: rgba(241, 248, 233, 0.9);
+    padding: 2rem;
+    margin: 0;
+    position: relative;
+    z-index: 2;
   }
 
   .aboutImage {
-    max-width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
   }
 
   .partners {
@@ -261,6 +345,13 @@
 @media (max-width: 480px) {
   .hero {
     height: 50vh;
+    margin-bottom: 3rem;
+  }
+
+  .heroContent {
+    padding: 1.5rem;
+    margin: 0.5rem;
+    width: 95%;
   }
 
   .slide {
@@ -279,6 +370,8 @@
     padding: 5px 15px !important;
     font-size: 0.8rem !important;
   }
+
+  .aboutColText {
+    padding: 1.5rem;
+  }
 }
-
-

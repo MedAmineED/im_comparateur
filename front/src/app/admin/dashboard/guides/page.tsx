@@ -5,6 +5,23 @@ import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import GuideService from '@/app/API/GuideService';
 import type { GuideEntity, GuideFormData } from '@/app/entities/GuideEntity';
 import type { UploadFile } from 'antd/es/upload/interface';
+import { IMAGES_STORE } from '@/app/API/ApiURLs/ImagesUrls';
+
+interface ErrorResponseData {
+    message?: string;
+    [key: string]: unknown;
+}
+
+interface ErrorResponse {
+    data?: ErrorResponseData;
+    status?: number;
+    headers?: Record<string, string>;
+}
+
+interface ApiError {
+    response?: ErrorResponse;
+    message?: string;
+}
 
 const GuidesManagement: React.FC = () => {
     const [guides, setGuides] = useState<GuideEntity[]>([]);
@@ -36,9 +53,20 @@ const GuidesManagement: React.FC = () => {
     };
 
     const handleEdit = (record: GuideEntity) => {
-        console.log(record)
+        console.log('Editing guide:', record);
         setEditingGuide(record);
-        form.setFieldsValue(record);
+        
+        // Prepare the form values
+        const formValues = {
+            title: record.title || '',
+            description: record.description || '',
+            introduction: record.introduction || '',
+            author: record.author || '',
+            steps: record.steps || []
+        };
+        
+        console.log('Setting form values:', formValues);
+        form.setFieldsValue(formValues);
         
         if (record.icon_image) {
             setFileList([
@@ -46,7 +74,7 @@ const GuidesManagement: React.FC = () => {
                     uid: '-1',
                     name: record.icon_image.split('/').pop() || 'image',
                     status: 'done',
-                    url: `http://localhost:8000/storage/${record.icon_image}`,
+                    url: IMAGES_STORE + record.icon_image,
                 }
             ]);
         } else {
@@ -77,34 +105,76 @@ const GuidesManagement: React.FC = () => {
 
     const handleSubmit = async (values: GuideFormData) => {
         try {
+            // Validate required fields
+            const requiredFields = ['title', 'description', 'introduction', 'author'];
+            const missingFields = requiredFields.filter(field => !values[field as keyof GuideFormData]);
+            
+            if (missingFields.length > 0) {
+                message.error(`Missing required fields: ${missingFields.join(', ')}`);
+                return;
+            }
+
+            // Log the initial form values
+            console.log('Initial Form Values:', values);
+            
+            // Create a new FormData instance
             const formData = new FormData();
-            (Object.keys(values) as Array<keyof GuideFormData>).forEach(key => {
-                if (key !== 'icon_image' && key !== 'steps') {
-                    formData.append(key, values[key]);
-                }
-            });
+            
+            // Explicitly append each field with string values
+            formData.append('title', String(values.title).trim());
+            formData.append('description', String(values.description).trim());
+            formData.append('introduction', String(values.introduction).trim());
+            formData.append('author', String(values.author).trim());
 
-            // Append steps as JSON string
-            formData.append('steps', JSON.stringify(values.steps));
+            // Handle steps array
+            const stepsArray = values.steps || [];
+            const validSteps = stepsArray.map(step => ({
+                title: String(step.title).trim(),
+                content: String(step.content).trim(),
+                order: step.order
+            }));
+            formData.append('steps', JSON.stringify(validSteps));
 
-            // Append icon image if exists
+            // Handle icon image
             if (fileList[0]?.originFileObj) {
+                // If there's a new file being uploaded
                 formData.append('icon_image', fileList[0].originFileObj);
+            } else if (editingGuide && !fileList.length) {
+                // If we're editing and no new file was selected, don't send the icon_image field at all
+                console.log('Keeping existing image, not sending in request');
+            }
+
+            // Debug: Log all form data entries
+            console.log('Form Data Entries:');
+            const formDataEntries = Array.from(formData.entries());
+            for (const [key, value] of formDataEntries) {
+                console.log(key, ':', value);
             }
 
             if (editingGuide) {
-                console.log(values)
-                await GuideService.updateGuide(editingGuide.id!, formData);
+                const response = await GuideService.updateGuide(editingGuide.id!, formData);
+                console.log('Update Response:', response);
                 message.success('Guide mis à jour avec succès');
             } else {
-                await GuideService.createGuide(formData);
+                // For new guides, icon_image is required
+                if (!fileList[0]?.originFileObj) {
+                    message.error("L'image est requise pour un nouveau guide");
+                    return;
+                }
+                const response = await GuideService.createGuide(formData);
+                console.log('Create Response:', response);
                 message.success('Guide créé avec succès');
             }
             setModalVisible(false);
             fetchGuides();
-        } catch (error) {
-            console.error('Error:', error);
-            message.error('Échec de la sauvegarde du guide');
+        } catch (error: unknown) {
+            console.error('Error Details:', {
+                response: (error as ApiError)?.response?.data,
+                status: (error as ApiError)?.response?.status,
+                headers: (error as ApiError)?.response?.headers
+            });
+            const errorMessage = (error as ApiError)?.response?.data?.message || 'Échec de la sauvegarde du guide';
+            message.error(errorMessage);
         }
     };
 

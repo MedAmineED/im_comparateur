@@ -1,7 +1,9 @@
 export interface ClientEntity {
-    id: number;
-    firstName: string;
-    lastName: string;
+    id?: number;
+    firstname: string;
+    lastname: string;
     email: string;
-    phone: string;
+    tel: string;
+    age?: number;
+    address?: string;
 }

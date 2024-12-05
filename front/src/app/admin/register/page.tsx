@@ -6,6 +6,17 @@ import Image from 'next/image';
 import styles from '../Login.module.css';
 import AuthService from '../../API/AuthService';
 
+interface ApiError {
+    response?: {
+        data?: {
+            message?: string;
+            [key: string]: unknown;
+        };
+    };
+}
+
+
+
 const { Title } = Typography;
 const { Option } = Select;
 
@@ -27,12 +38,37 @@ const RegisterPage: React.FC = () => {
                 message.success('User created successfully!');
                 router.push('/admin');
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Registration error:', error);
-            const errorMessage = error.response?.data?.message 
-                || Object.values(error.response?.data || {})[0]?.[0]
-                || 'Registration failed';
-            message.error(errorMessage);
+            
+            // Type guard to check if error is an object with a response property
+            const isApiError = (err: unknown): err is ApiError => 
+                err !== null && 
+                typeof err === 'object' && 
+                'response' in err;
+
+            const getErrorMessage = (error: unknown): string => {
+                if (isApiError(error)) {
+                    // First, try to get message from response data
+                    if (error.response?.data?.message) {
+                        return error.response.data.message;
+                    }
+
+                    // If no message, check if first value of response data is an array
+                    const firstValue = error.response?.data ? Object.values(error.response.data)[0] : null;
+                    if (Array.isArray(firstValue) && firstValue.length > 0) {
+                        return firstValue[0];
+                    }
+
+                    return 'Registration failed';
+                } else if (error instanceof Error) {
+                    return error.message;
+                }
+
+                return 'An unexpected error occurred';
+            };
+
+            message.error(getErrorMessage(error));
         } finally {
             setLoading(false);
         }

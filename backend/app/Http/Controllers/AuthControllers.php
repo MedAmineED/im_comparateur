@@ -66,8 +66,8 @@ class AuthControllers extends Controller
                 ], 401);
             }
 
-            // Generate a simple token (you might want to use Laravel Sanctum or JWT for production)
-            $token = bin2hex(random_bytes(32));
+            // Create new token
+            $token = $user->createToken('auth-token')->plainTextToken;
 
             return response()->json([
                 'message' => 'Login successful',
@@ -134,13 +134,14 @@ class AuthControllers extends Controller
     public function logout(Request $request)
     {
         try {
-            // Clear user's token/session
-            // You might want to invalidate the token in a real token-based system
-        
+            // Revoke all tokens for the authenticated user
+            $request->user()->tokens()->delete();
+            
             return response()->json([
                 'message' => 'Successfully logged out'
             ]);
         } catch (\Exception $e) {
+            Log::error('Logout error: ' . $e->getMessage());
             return response()->json([
                 'message' => 'Error during logout',
                 'error' => $e->getMessage()

@@ -25,9 +25,18 @@ const HerosectionNew: React.FC<HerosectionNewProps> = ({
   };
 
   return (
-    <div  className={"bg-gray-100 py-20 " + styles.heroNewMain}>
+    <div className={"bg-gray-100 py-20 " + styles.heroNewMain}>
       <div className={"container mx-auto " + styles.semIHero}>
-        <Row className= {styles.thirdContaner} align="middle" gutter={[32, 32]}>
+        <div className={styles.heroBackground}>
+          <Image 
+            src={imageUrl} 
+            alt="Illustration de personnes discutant des plans d'assurance"
+            fill
+            style={{ objectFit: 'cover' }}
+            priority    
+          />
+        </div>
+        <Row className={styles.heroContent + " " + styles.thirdContaner} align="middle" gutter={[32, 32]}>
           <Col xs={24} md={12}>
             <div className="pr-8">
               <Title 
@@ -51,8 +60,8 @@ const HerosectionNew: React.FC<HerosectionNewProps> = ({
               </Button>
             </div>
           </Col>
-          <Col className= {styles.imgContainer} xs={24} md={12}>
-            <div className={"w-full "+ styles.scondImageCont}>
+          <Col className={styles.imgContainer} xs={24} md={12}>
+            <div className={"w-full " + styles.scondImageCont + " " + styles.desktopOnly}>
               <Image 
                 src={imageUrl} 
                 alt="Illustration de personnes discutant des plans d'assurance"

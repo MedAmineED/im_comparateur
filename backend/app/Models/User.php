@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
         'user_name',
@@ -35,7 +36,7 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin'; // Si le rôle est 'admin', retourne true
+        return in_array($this->role, ['admin', 'super_admin']);
     }
 
     // Relation avec les actualités : Un utilisateur peut avoir plusieurs actualités
@@ -44,4 +45,3 @@ class User extends Authenticatable
         return $this->hasMany(Actualite::class, 'user_id', 'id'); // Utilise 'user_id' comme clé étrangère
     }
 }
-

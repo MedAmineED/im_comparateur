@@ -10,6 +10,7 @@ import ApiUrls from "../API/ApiURLs/ApiURLs";
 import { ActualityEntity } from "../entities/ActualityEntity";
 import { useRouter } from "next/navigation";
 import { Grid } from 'antd';
+import { IMAGES_STORE } from "../API/ApiURLs/ImagesUrls";
 
 const { useBreakpoint } = Grid;
 
@@ -86,7 +87,7 @@ const ActualityPage = () => {
 
                 <div className={styles.imageWrapper}>
                   <Image
-                    src={`http://localhost:8000/storage/${article.image}`}
+                    src={IMAGES_STORE + article.image}
                     alt={article.title}
                     fill
                     priority={index < 2}

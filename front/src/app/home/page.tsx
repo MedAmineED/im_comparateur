@@ -12,6 +12,7 @@ import { ActualityEntity } from '../entities/ActualityEntity';
 import { GuideEntity } from '../entities/GuideEntity';
 import HerosectionNew from '../components/herosection1/HerosectionNew';
 import ApiUrls from '../API/ApiURLs/ApiURLs';
+import { IMAGES_STORE } from '../API/ApiURLs/ImagesUrls';
 
 const { Title, Paragraph } = Typography;
 
@@ -27,6 +28,7 @@ export default function Component() {
     try {
       setLoading(true);
       const response = await ActualitiesService.GetAllActualities(ApiUrls.ACTUALITES);
+      console.log(response);
       setArticles(response.slice(0, 6));
     } catch (e) {
       console.error("Error getting actualities:", e);
@@ -40,6 +42,7 @@ export default function Component() {
   const getGuides = async () => {
     try {
       const response = await GuideService.getAllGuides();
+      console.log(response);
       setGuides(response.slice(0, 4));
     } catch (error) {
       console.error("Error fetching guides:", error);
@@ -115,10 +118,13 @@ export default function Component() {
       </section>
 
       {/* Guides Section */}
-      <section className={styles.guides}>
+      <section className={styles.guides}> 
         <Title level={2} className={styles.sectionTitle}>Nos Guides</Title>
         <Row gutter={[32, 32]}>
-          {guides.map((guide, index) => (
+          {guides.map((guide, index) =>{ 
+            console.log("from tsx ");
+            console.log(guide);
+            return (
             <Col xs={24} sm={12} md={8} lg={6} key={index}>
               <Card 
                 className={styles.guideCard}
@@ -138,7 +144,7 @@ export default function Component() {
                 <Title className={styles.guideTitle} level={3}>{guide.title}</Title>
               </Card>
             </Col>
-          ))}
+          )})}
         </Row>
       </section>
   
@@ -148,14 +154,17 @@ export default function Component() {
         <Row gutter={[32, 32]}>
           {loading && <div>Loading actualities...</div>}
           {error && <div>Error: {error}</div>}
-          {!loading && articles.map((article, index) => (
+          {!loading && articles.map((article, index) => {
+            console.log("from tsx actuality ");
+            console.log(IMAGES_STORE +article.image); 
+            return (
             <Col xs={24} sm={12} md={8} key={index}>
               <Card
                 hoverable
                 className={styles.updateCard}
                 cover={
                   <Image
-                    src={`http://localhost:8000/storage/${article.image}`}
+                    src={IMAGES_STORE + article.image}
                     alt={article.title}
                     width={400}
                     height={200}
@@ -173,7 +182,7 @@ export default function Component() {
                 </Button>
               </Card>
             </Col>
-          ))}
+          )})}
         </Row>
       </section>
     </div>

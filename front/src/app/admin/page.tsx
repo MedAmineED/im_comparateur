@@ -6,6 +6,16 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import AuthService from '../API/AuthService';
 
+interface ApiError {
+    response?: {
+        data?: {
+            message?: string;
+        } | string[];
+        status?: number;
+    };
+    message: string;
+}
+
 const { Title } = Typography;
 
 const Page: React.FC = () => {
@@ -25,11 +35,15 @@ const Page: React.FC = () => {
                 message.success('Login successful!');
                 router.push('/admin/dashboard');
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Login error:', error);
-            const errorMessage = error.response?.data?.message 
-                || Object.values(error.response?.data || {})[0]?.[0]
-                || 'Login failed';
+            const apiError = error as ApiError;
+            const errorMessage = 
+                typeof apiError.response?.data === 'object' && apiError.response?.data && 'message' in apiError.response.data 
+                    ? apiError.response.data.message 
+                    : Array.isArray(apiError.response?.data) 
+                        ? apiError.response.data[0] 
+                        : 'Login failed';
             message.error(errorMessage);
         } finally {
             setLoading(false);

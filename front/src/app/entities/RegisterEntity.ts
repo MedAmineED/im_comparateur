@@ -1,11 +1,11 @@
 // RegisterEntity.ts
 export interface RegisterEntity {
     id?: number;
-    firstname: string;
-    lastname: string;
-    age: number;
-    tel: string;
-    address: string;
+    firstName: string;
+    lastName: string;
     email: string;
+    phone: string;
+    age?: number;
+    address?: string;
     password: string;
 }
